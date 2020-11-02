@@ -21,9 +21,9 @@
         public static ScenarioContext _scenarioContext;
         public static FeatureContext _featureContext;
         public static IWebDriver driver;
-        private ScenarioStepContext _stepContext;
-        private static string TestRepoPath;
-        private static string ScreenShotPath;
+
+        public static string TestRepoPath;
+        public static string ScreenShotPath;
 
 
         public Hooks(IObjectContainer objectContainer)
