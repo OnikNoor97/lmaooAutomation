@@ -63,6 +63,7 @@
             SelectBrowser(browserChoice);
             scenarios.Add("_driver", driver);
             driver.Manage().Window.Maximize();
+            driver.Url = config["BaseURL"];
         }
 
         internal void SelectBrowser(string browserChoice)
