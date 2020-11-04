@@ -105,6 +105,9 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
  testRunner.And("I navigate to the Home Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
+#line 7
+ testRunner.And("I navigate to the Login Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
             }
             this.ScenarioCleanup();
         }
