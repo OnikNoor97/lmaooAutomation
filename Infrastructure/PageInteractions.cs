@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.Extensions;
 using OpenQA.Selenium.Support.UI;
 using System;
@@ -19,12 +20,28 @@ namespace Infrastructure
             js = (IJavaScriptExecutor)_driver;
         }
 
-        public void FailMessage(By by, string function)
+        public void Click(By by)
         {
-            _driver.TakeScreenshot().SaveAsFile($"screens.png", ScreenshotImageFormat.Png);
+            WaitForPageDomLoadComplete();
 
-            Message = $"Action attempted {function}: element located by {by.ToString()}";
-            Assert.Fail($"Exception in {function}: element located by {by.ToString()} not visible and enabled within 10 seconds.");
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+
+            try
+            {
+                IWebElement myElement = wait.Until<IWebElement>(driver =>
+                {
+                    IWebElement element = _driver.FindElement(by);
+                    return (element != null && element.Displayed && element.Enabled) ? element : null;
+                }
+                );
+
+                js.ExecuteScript("arguments[0].scrollIntoView();", myElement);
+                myElement.Click();
+            }
+            catch (WebDriverTimeoutException)
+            {
+                FailMessage(by, "Click");
+            }
         }
 
         public void SendKeys(By by, string value)
@@ -52,6 +69,7 @@ namespace Infrastructure
                 FailMessage(by, "SendKeys");
             }
         }
+
         public void WaitForPageDomLoadComplete()
         {
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
@@ -61,6 +79,49 @@ namespace Infrastructure
                 {
                     break;
                 }
+            }
+        }
+
+        public void WaitForElementToBeVisible(By by)
+        {
+            WaitForPageDomLoadComplete();
+
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+
+            try
+            {
+                IWebElement myElement = wait.Until<IWebElement>(driver =>
+                {
+                    IWebElement element = _driver.FindElement(by);
+                    return (element.Displayed && element.Enabled) ? element : null;
+                }
+                );
+            }
+            catch (WebDriverTimeoutException)
+            {
+                FailMessage(by, "Element not present");
+            }
+        }
+
+        public bool VerifyIfElementExists(By by)
+        {
+            WaitForPageDomLoadComplete();
+
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
+
+            try
+            {
+                IWebElement myElement = wait.Until<IWebElement>(driver =>
+                {
+                    IWebElement element = _driver.FindElement(by);
+                    return (element != null && element.Displayed && element.Enabled) ? element : null;
+                }
+                );
+                return true;
+            }
+            catch (Exception ex) when (ex is WebDriverException || ex is ElementNotVisibleException || ex is NoSuchElementException || ex is WebDriverTimeoutException)
+            {
+                return false;
             }
         }
 
@@ -74,6 +135,105 @@ namespace Infrastructure
                     break;
                 }
             }
+        }
+
+        public void FailMessage(By by, string function)
+        {
+            _driver.TakeScreenshot().SaveAsFile($"screens.png", ScreenshotImageFormat.Png);
+
+            Message = $"Action attempted {function}: element located by {by.ToString()}";
+            Assert.Fail($"Exception in {function}: element located by {by.ToString()} not visible and enabled within 10 seconds.");
+        }
+
+        public void SelectDropDownByText(By by, string text)
+        {
+            WaitForAjaxToFinish();
+            WaitForPageDomLoadComplete();
+
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+
+            try
+            {
+                IWebElement myElement = wait.Until<IWebElement>(driver =>
+                {
+                    IWebElement element = _driver.FindElement(by);
+                    return (element.Displayed && element.Enabled) ? element : null;
+                }
+                );
+
+                js.ExecuteScript("arguments[0].scrollIntoView();", myElement);
+                SelectElement selector = new SelectElement(myElement);
+                selector.SelectByText(text);
+
+            }
+            catch (WebDriverTimeoutException)
+            {
+                FailMessage(by, "SelectDropDown");
+            }
+        }
+
+        public void SelectDropDownByValue(By by, string value)
+        {
+            WaitForAjaxToFinish();
+            WaitForPageDomLoadComplete();
+
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+
+            try
+            {
+                IWebElement myElement = wait.Until<IWebElement>(driver =>
+                {
+                    IWebElement element = _driver.FindElement(by);
+                    return (element.Displayed && element.Enabled) ? element : null;
+                }
+                );
+
+                js.ExecuteScript("arguments[0].scrollIntoView();", myElement);
+                SelectElement selector = new SelectElement(myElement);
+                selector.SelectByValue(value);
+
+            }
+            catch (WebDriverTimeoutException)
+            {
+                FailMessage(by, "SelectDropDown");
+            }
+        }
+
+        public void TogglecheckBox(By by, bool checkstate)
+        {
+            WaitForAjaxToFinish();
+            WaitForPageDomLoadComplete();
+
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+
+            try
+            {
+                IWebElement myElement = wait.Until<IWebElement>(driver =>
+                {
+                    IWebElement element = _driver.FindElement(by);
+                    return (element.Displayed && element.Enabled) ? element : null;
+                }
+                );
+
+                //This will scroll the page till the element is found		
+                js.ExecuteScript("arguments[0].scrollIntoView();", myElement);
+
+                if (myElement.Selected != checkstate)
+                {
+                    myElement.Click();
+                }
+            }
+            catch (WebDriverTimeoutException)
+            {
+                FailMessage(by, "Click");
+            }
+        }
+
+        public Actions HoverMouseOverToElement(IWebElement element)
+        {
+            Actions actionBuilder = new Actions(_driver);
+            actionBuilder.MoveToElement(element).Perform();
+            return actionBuilder;
         }
 
         public void CloseDriver()
