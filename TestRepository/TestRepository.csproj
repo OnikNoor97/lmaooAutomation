@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BaseLibS" Version="1.6.4.360" />
+    <PackageReference Include="BaseLibS" Version="1.6.4.382" />
     <PackageReference Include="BoDi" Version="1.4.1" />
     <PackageReference Include="EnvDTE" Version="16.7.30508.193" />
     <PackageReference Include="EnvDTE80" Version="16.7.30328.74" />
@@ -16,18 +16,18 @@
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.8" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />
     <PackageReference Include="Selenium.Support" Version="3.141.0" />
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="85.0.4183.8700" />
-    <PackageReference Include="SpecFlow" Version="3.4.8" />
-    <PackageReference Include="SpecFlow.NUnit" Version="3.4.8" />
-    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.4.8" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="87.0.4280.2000" />
+    <PackageReference Include="SpecFlow" Version="3.5.5" />
+    <PackageReference Include="SpecFlow.NUnit" Version="3.5.5" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.5.5" />
   </ItemGroup>
 
   <ItemGroup>
